@@ -43,13 +43,13 @@ int main()
 	al_init_ttf_addon();
 	al_init_primitives_addon();
 
-	bgImage = al_load_bitmap("starBG.png");
-	mgImage = al_load_bitmap("starMG.png");
-	fgImage = al_load_bitmap("starFG.png");
+	bgImage = al_load_bitmap("spaceBG.jpg");
+	mgImage = al_load_bitmap("spaceMG.png");
+	fgImage = al_load_bitmap("spaceFG.png");
 
-	BG.InitBackground(BG, 0, 0, 0, 1, 600, 650, 1, 1, bgImage);
-	MG.InitBackground(MG, 0, 0, 0, 2, 600, 650, 1, 1, mgImage);
-	FG.InitBackground(FG, 0, 0, 0, 4, 600, 650, 1, 1, fgImage);
+	BG.InitBackground(BG, 0, 0, 0, 0.8, 600, 1080, 1, 1, bgImage);
+	MG.InitBackground(MG, 0, 0, 0, 1.2, 600, 800, 1, 1, mgImage);
+	FG.InitBackground(FG, 0, 0, 0, 1.8, 600, 600, 1, 1, fgImage);
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
@@ -101,7 +101,7 @@ int main()
 			FG.DrawBackground(FG);
 
 			al_flip_display();
-			al_clear_to_color(al_map_rgb(0, 0, 30));
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}
 	}
 
