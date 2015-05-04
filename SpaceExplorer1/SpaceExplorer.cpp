@@ -3,32 +3,13 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
-
+#include"Background.h"
 
 //Globals: GUI Setup
 const int WIDTH = 600;
 const int HEIGHT = 650;
 
-struct Background
-{
-	float x;
-	float y;
-	float velX;
-	float velY;
-	int dirX;
-	int dirY;
-
-	int width;
-	int height;
-
-	ALLEGRO_BITMAP *image;
-};
-
-void InitBackground(Background &back, float x, float y, float velx, float vely, int width, int height, int dirX, int dirY, ALLEGRO_BITMAP *image);
-void UpdateBackground(Background &back);
-void DrawBackground(Background &back);
-
-int main(void)
+int main()
 {
 	//variables
 	bool done = false;
@@ -38,7 +19,7 @@ int main(void)
 	Background MG;
 	Background FG;
 
-	//allegro variable
+	//allegro variables
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
@@ -66,9 +47,9 @@ int main(void)
 	mgImage = al_load_bitmap("starMG.png");
 	fgImage = al_load_bitmap("starFG.png");
 
-	InitBackground(BG, 0, 0, 0, 1, 600, 650, 1, 1, bgImage);
-	InitBackground(MG, 0, 0, 0, 2, 600, 650, 1, 1, mgImage);
-	InitBackground(FG, 0, 0, 0, 4, 600, 650, 1, 1, fgImage);
+	BG.InitBackground(BG, 0, 0, 0, 1, 600, 650, 1, 1, bgImage);
+	MG.InitBackground(MG, 0, 0, 0, 2, 600, 650, 1, 1, mgImage);
+	FG.InitBackground(FG, 0, 0, 0, 4, 600, 650, 1, 1, fgImage);
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
@@ -105,9 +86,9 @@ int main(void)
 		}
 		else if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			UpdateBackground(BG);
-			UpdateBackground(MG);
-			UpdateBackground(FG);
+			BG.UpdateBackground(BG);
+			MG.UpdateBackground(MG);
+			FG.UpdateBackground(FG);
 			render = true;
 		}
 
@@ -115,9 +96,9 @@ int main(void)
 		{
 			render = false;
 
-			DrawBackground(BG);
-			DrawBackground(MG);
-			DrawBackground(FG);
+			BG.DrawBackground(BG);
+			MG.DrawBackground(MG);
+			FG.DrawBackground(FG);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 30));
@@ -133,29 +114,3 @@ int main(void)
 	return 0;
 }
 
-void InitBackground(Background &back, float x, float y, float velx, float vely, int width, int height, int dirX, int dirY, ALLEGRO_BITMAP *image)
-{
-	back.x = x;
-	back.y = y;
-	back.velX = velx;
-	back.velY = vely;
-	back.width = width;
-	back.height = height;
-	back.dirX = dirX;
-	back.dirY = dirY;
-	back.image = image;
-}
-void UpdateBackground(Background &back)
-{
-	back.y += back.velY * back.dirY;
-	if (back.y + back.height <= 0)
-		back.y = 0;
-}
-void DrawBackground(Background &back)
-{
-	al_draw_bitmap(back.image, back.x, back.y, 0);
-
-	if (back.y + back.height > HEIGHT)
-
-		al_draw_bitmap(back.image, back.x, back.y - back.height, 0);
-}
