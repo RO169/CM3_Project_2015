@@ -35,7 +35,7 @@ void Background::InitBackground(Background &back, float x, float y, float velx, 
 void Background::UpdateBackground(Background &back)
 {
 	back.yPos += back.velocityY * back.directionY;
-	if (back.yPos - back.height >= HEIGHT)
+	if (back.yPos - back.height >= 0)
 		back.yPos = 0;
 };
 

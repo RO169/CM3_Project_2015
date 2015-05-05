@@ -16,7 +16,9 @@ int main()
 	bool render = false;
 
 	Background BG;
-	Background MG;
+	Background MG1;
+	Background MG2;
+	Background MG3;
 	Background FG;
 
 	//allegro variables
@@ -24,7 +26,9 @@ int main()
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
 	ALLEGRO_BITMAP *bgImage = NULL;
-	ALLEGRO_BITMAP *mgImage = NULL;
+	ALLEGRO_BITMAP *mgImage1 = NULL;
+	ALLEGRO_BITMAP *mgImage2 = NULL;
+	ALLEGRO_BITMAP *mgImage3 = NULL;
 	ALLEGRO_BITMAP *fgImage = NULL;
 
 	//program init
@@ -44,12 +48,19 @@ int main()
 	al_init_primitives_addon();
 
 	bgImage = al_load_bitmap("spaceBG.jpg");
-	mgImage = al_load_bitmap("spaceMG.png");
+	mgImage1 = al_load_bitmap("planet1.jpg");
+	al_convert_mask_to_alpha(mgImage1, al_map_rgb(0, 0, 0));
+	mgImage2 = al_load_bitmap("planet2.jpg");
+	al_convert_mask_to_alpha(mgImage2, al_map_rgb(0, 0, 0));
+	mgImage3 = al_load_bitmap("planet3.jpg");
+	al_convert_mask_to_alpha(mgImage3, al_map_rgb(0, 0, 0));
 	fgImage = al_load_bitmap("spaceFG.png");
 
-	BG.InitBackground(BG, 0, 0, 0, 0.8, 600, 1080, 1, 1, bgImage);
-	MG.InitBackground(MG, 0, 0, 0, 1.2, 600, 800, 1, 1, mgImage);
-	FG.InitBackground(FG, 0, 0, 0, 1.8, 600, 600, 1, 1, fgImage);
+	BG.InitBackground(BG, 0, 0, 0, 0.8, 600, 1920, 1, 1, bgImage);
+	MG1.InitBackground(MG1, 0, 0, 0, 1.2, 600, 2000, 1, 1, mgImage1);
+	MG2.InitBackground(MG2, 0, 0, 0, 1.2, 600, 6512, 1, 1, mgImage2);
+	MG3.InitBackground(MG3, 0, 0, 0, 1.2, 600, 1563, 1, 1, mgImage3);
+	FG.InitBackground(FG, 0, 0, 0, 1.8, 600, 800, 1, 1, fgImage);
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
@@ -87,7 +98,9 @@ int main()
 		else if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			BG.UpdateBackground(BG);
-			MG.UpdateBackground(MG);
+			MG1.UpdateBackground(MG1);
+			MG2.UpdateBackground(MG2);
+			MG3.UpdateBackground(MG3);
 			FG.UpdateBackground(FG);
 			render = true;
 		}
@@ -97,7 +110,9 @@ int main()
 			render = false;
 
 			BG.DrawBackground(BG);
-			MG.DrawBackground(MG);
+			MG1.DrawBackground(MG1);
+			MG2.DrawBackground(MG2);
+			MG3.DrawBackground(MG3);
 			FG.DrawBackground(FG);
 
 			al_flip_display();
@@ -106,7 +121,9 @@ int main()
 	}
 
 	al_destroy_bitmap(bgImage);
-	al_destroy_bitmap(mgImage);
+	al_destroy_bitmap(mgImage1);
+	al_destroy_bitmap(mgImage2);
+	al_destroy_bitmap(mgImage3);
 	al_destroy_bitmap(fgImage);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						//destroy our display object
