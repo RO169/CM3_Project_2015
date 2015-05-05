@@ -1,8 +1,9 @@
 //Class for Background Images 
 
+#pragma once
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
-#pragma once
+
 
 class Background
 {

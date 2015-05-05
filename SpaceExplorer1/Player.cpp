@@ -1,6 +1,6 @@
 #include "Player.h"
-const int HEIGHT = 924;
-const int WIDTH = 288;
+const int HEIGHT = 840;
+const int WIDTH = 296;
 
 Player::Player(){};
 
@@ -40,8 +40,8 @@ void Player::InitShip(Player &ship, ALLEGRO_BITMAP *image)
 	ship.curFrame = 0;
 	ship.frameCount = 0;
 	ship.frameDelay = 50;
-	ship.frameWidth = 288;
-	ship.frameHeight = 132;
+	ship.frameWidth = 296;
+	ship.frameHeight = 120;
 	ship.animationCol = 1;
 	ship.animationDirection = 1;
 	ship.animationRow = 4;

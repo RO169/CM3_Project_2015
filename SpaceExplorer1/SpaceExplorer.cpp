@@ -1,3 +1,5 @@
+#include<cstdlib>
+#include<ctime>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
@@ -22,6 +24,7 @@ int main()
 	Background MG1;
 	Background MG2;
 	Background MG3;
+	Background MG4;
 	Background FG;
 
 	Player Ship;
@@ -34,6 +37,7 @@ int main()
 	ALLEGRO_BITMAP *mgImage1 = NULL;
 	ALLEGRO_BITMAP *mgImage2 = NULL;
 	ALLEGRO_BITMAP *mgImage3 = NULL;
+	ALLEGRO_BITMAP *mgImage4 = NULL;
 	ALLEGRO_BITMAP *fgImage = NULL;
 	ALLEGRO_BITMAP *pImage = NULL;
 
@@ -54,20 +58,26 @@ int main()
 	al_init_primitives_addon();
 
 	//background images
+	srand(time(0));
+	int num = ((rand() % 6000) + 2000);
+
 	bgImage = al_load_bitmap("spaceBG.jpg");
-	mgImage1 = al_load_bitmap("planet1.jpg");
-	al_convert_mask_to_alpha(mgImage1, al_map_rgb(0, 0, 0));
-	mgImage2 = al_load_bitmap("planet2.jpg");
-	al_convert_mask_to_alpha(mgImage2, al_map_rgb(0, 0, 0));
-	mgImage3 = al_load_bitmap("planet3.jpg");
-	al_convert_mask_to_alpha(mgImage3, al_map_rgb(0, 0, 0));
+	mgImage1 = al_load_bitmap("MG-1.png");
+	al_convert_mask_to_alpha(mgImage1, al_map_rgb(255, 255, 255));
+	mgImage2 = al_load_bitmap("MG-2.png");
+	al_convert_mask_to_alpha(mgImage2, al_map_rgb(255, 255, 255));
+	mgImage3 = al_load_bitmap("MG-3.png");
+	al_convert_mask_to_alpha(mgImage3, al_map_rgb(255, 255, 255));
+	mgImage4 = al_load_bitmap("MG-4.png");
+	al_convert_mask_to_alpha(mgImage3, al_map_rgb(255, 255, 255));
 	fgImage = al_load_bitmap("spaceFG.png");
 
-	BG.InitBackground(BG, 0, 0, 0, 1.4, 600, 1920, 1, 1, bgImage);
-	MG1.InitBackground(MG1, 0, 0, 0, 0.8, 600, 2000, 1, 1, mgImage1);
-	MG2.InitBackground(MG2, 0, 0, 0, 0.7, 600, 6512, 1, 1, mgImage2);
-	MG3.InitBackground(MG3, 0, 0, 0, 0.6, 600, 1563, 1, 1, mgImage3);
+	BG.InitBackground(BG, 0, 0, 1, 1.4, 600, 1920, 1, 1, bgImage);
 	FG.InitBackground(FG, 0, 0, 0, 2, 600, 800, 1, 1, fgImage);
+	MG1.InitBackground(MG1, 0, 0, 0.2, 0.8, 600, num, 2, 1, mgImage1);
+	MG2.InitBackground(MG2, 0, 0, 4, 0.7, 600, 100 + num, 1, 1, mgImage2);
+	MG3.InitBackground(MG3, 0, 0, 0.1, 0.6, 600, 210 + num * num, -3, 1, mgImage3);
+	MG4.InitBackground(MG4, 0, 0, 0.02, 0.6, 600, 1500 + num, 1, 1, mgImage4);
 
 	//player images
 	pImage = al_load_bitmap("Ship2.bmp");
@@ -96,6 +106,7 @@ int main()
 			MG1.UpdateBackground(MG1);
 			MG2.UpdateBackground(MG2);
 			MG3.UpdateBackground(MG3);
+			MG3.UpdateBackground(MG4);
 			FG.UpdateBackground(FG);
 			render = true;
 
@@ -204,6 +215,7 @@ int main()
 	al_destroy_bitmap(mgImage1);
 	al_destroy_bitmap(mgImage2);
 	al_destroy_bitmap(mgImage3);
+	al_destroy_bitmap(mgImage4);
 	al_destroy_bitmap(fgImage);
 	al_destroy_bitmap(pImage);
 	al_destroy_event_queue(event_queue);
