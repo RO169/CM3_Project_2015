@@ -80,7 +80,7 @@ int main()
 	MG4.InitBackground(MG4, 0, 0, 0.02, 0.6, 600, 1500 + num, 1, 1, mgImage4);
 
 	//player images
-	pImage = al_load_bitmap("Ship2.bmp");
+	pImage = al_load_bitmap("Ship Sprite sheet 3x3.png");
 	al_convert_mask_to_alpha(pImage, al_map_rgb(0, 0, 0));
 	Ship.InitShip(Ship, pImage);
 

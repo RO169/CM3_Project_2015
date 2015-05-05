@@ -1,6 +1,6 @@
 #include "Player.h"
-const int HEIGHT = 840;
-const int WIDTH = 296;
+const int HEIGHT = 438;
+const int WIDTH = 876;
 
 Player::Player(){};
 
@@ -40,11 +40,11 @@ void Player::InitShip(Player &ship, ALLEGRO_BITMAP *image)
 	ship.curFrame = 0;
 	ship.frameCount = 0;
 	ship.frameDelay = 50;
-	ship.frameWidth = 296;
-	ship.frameHeight = 120;
+	ship.frameWidth = 292;
+	ship.frameHeight = 146;
 	ship.animationCol = 1;
 	ship.animationDirection = 1;
-	ship.animationRow = 4;
+	ship.animationRow = 1;
 
 	ship.image = image;
 };
@@ -52,14 +52,17 @@ void Player::InitShip(Player &ship, ALLEGRO_BITMAP *image)
 void Player::ResetShipAnimation(Player &ship, int position)
 {
 	if (position == 1)
-		ship.animationRow = 3;
+	{
+		ship.animationRow = 0;
+		ship.animationCol = 0;
+	}
 	else
 		ship.curFrame = 0;
 };
 
 void Player::DrawShip(Player &ship)
 {
-	int fx = ship.curFrame * ship.frameWidth;
+	int fx = ship.animationCol * ship.frameWidth;
 	int fy = ship.animationRow * ship.frameHeight;
 
 	al_draw_bitmap_region(ship.image, fx, fy, ship.frameWidth,
@@ -68,7 +71,7 @@ void Player::DrawShip(Player &ship)
 
 void Player::MoveUp(Player &ship)
 {
-	ship.animationRow = 3;
+	ship.animationCol = 1;
 	ship.yPos -= ship.speed;
 	if (ship.yPos < 350)
 		ship.yPos = 350;
@@ -77,7 +80,7 @@ void Player::MoveUp(Player &ship)
 
 void Player::MoveDown(Player &ship)
 {
-	ship.animationRow = 3;
+	ship.animationCol = 2;
 	ship.yPos += ship.speed;
 	if (ship.yPos > 650)
 		ship.yPos = 650;
@@ -85,21 +88,15 @@ void Player::MoveDown(Player &ship)
 
 void Player::MoveLeft(Player &ship)
 {
-		ship.animationRow = 3;
-		ship.animationRow = 2;
-		ship.animationRow = 1;
-		ship.animationRow = 0;
-		ship.xPos -= ship.speed;
-		if (ship.xPos < 0)
-			ship.xPos = 0;
+	ship.animationRow = 2;
+	ship.xPos -= ship.speed;
+	if (ship.xPos < 0)
+		ship.xPos = 0;
 };
 
 void Player::MoveRight(Player &ship)
 {
-	ship.animationRow = 3;
-	ship.animationRow = 4;
-	ship.animationRow = 5;
-	ship.animationRow = 6;
+	ship.animationRow = 1;
 	ship.xPos += ship.speed;
 	if (ship.xPos > 600)
 		ship.xPos = 600;
