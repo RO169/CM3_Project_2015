@@ -70,7 +70,7 @@ int main()
 	FG.InitBackground(FG, 0, 0, 0, 2, 600, 800, 1, 1, fgImage);
 
 	//player images
-	pImage = al_load_bitmap("Ship.bmp");
+	pImage = al_load_bitmap("Ship2.bmp");
 	al_convert_mask_to_alpha(pImage, al_map_rgb(0, 0, 0));
 	Ship.InitShip(Ship, pImage);
 
