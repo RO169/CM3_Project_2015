@@ -6,7 +6,8 @@ const int HEIGHT = 650;
 
 Background::Background(){};
 
-Background::Background(float x = 0, float y = 0, float velX = 0, float velY = 1, int dirX = 0, int dirY = 0, int w=600, int h=650, ALLEGRO_BITMAP *im=0)
+Background::Background(float x = 0, float y = 0, float velX = 0, float velY = 1,
+	                   int dirX = 0, int dirY = 0, int w=600, int h=650, ALLEGRO_BITMAP *im=0)
 {
 	xPos = x;
 	yPos = y;
