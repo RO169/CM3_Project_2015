@@ -44,7 +44,7 @@ public:
 	
 	void InitMiss(Player miss[], Player &Ship, ALLEGRO_BITMAP *mImage);
 	void DrawMiss(Player miss[]);
-	void FireMiss(Player miss[]);
+	void FireMiss(Player miss[], Player &Ship);
 	void UpdateMiss(Player miss[]);
 	
 	~Player();

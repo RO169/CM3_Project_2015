@@ -87,7 +87,8 @@ int main()
 	Ship.InitShip(Ship, pImage);
 
 	//missile image
-	mImage = al_load_bitmap("missile-sprite.png");
+	mImage = al_load_bitmap("miss.png");
+	al_convert_mask_to_alpha(mImage, al_map_rgb(255, 255, 255));
 	Missile[5].InitMiss(Missile, Ship, mImage);
 
 
@@ -135,7 +136,7 @@ int main()
 				Ship.ResetShipAnimation(Ship, 2);
 
 			if (keys[SPACE])
-			   Missile[5].FireMiss(Missile);
+			   Missile[5].FireMiss(Missile, Ship);
 			
 			/*
 			if (!isGameOver)
@@ -215,7 +216,7 @@ int main()
 			MG3.DrawBackground(MG3);
 			FG.DrawBackground(FG);
 
-			Missile[5].DrawMiss(Missile);
+			Missile[0].DrawMiss(Missile);
 			Ship.DrawShip(Ship);
 
 			al_flip_display();

@@ -113,36 +113,51 @@ void Player::InitMiss(Player Missile[], Player &Ship , ALLEGRO_BITMAP *mImage)
 		Missile[i].speed = 8;
 		//Missile.boundx = 10;
 		//Missile.boundy = 12;
-		Missile[i].maxFrame = 16;
+		Missile[i].maxFrame = 17;
 		Missile[i].curFrame = 0;
 		Missile[i].frameCount = 0;
-		Missile[i].frameDelay = 8;
-		Missile[i].frameWidth = 24;
+		Missile[i].frameDelay = 17;
+		Missile[i].frameWidth = 25;
 		Missile[i].frameHeight = 97;
 		Missile[i].animationCol = 0;
 		Missile[i].animationDirection = -1;
 		Missile[i].animationRow = 0;
 		Missile[i].image = mImage;
+		Missile[i].live = false;
 	}
 };
 
 void Player::DrawMiss(Player Missile[])
 {
-	for (int i = 0; i < 5; i++)
+	
+		for (int i = 0; i < 5; i++)
 	{
-		int fx = Missile[i].animationCol * Missile[i].frameWidth;
-		int fy = Missile[i].animationRow * Missile[i].frameHeight;
+		if (Missile[i].live)
+		{
+			int fx = Missile[i].animationCol * Missile[i].frameWidth;
+			int fy = Missile[i].animationRow * Missile[i].frameHeight;
 
-		al_draw_bitmap_region(Missile[i].image, fx, fy, Missile[i].frameWidth,
-			Missile[i].frameHeight, Missile[i].xPos - Missile[i].frameWidth / 2, Missile[i].yPos - Missile[i].frameHeight / 2, 0);
+			al_draw_bitmap_region(Missile[i].image, fx, fy, Missile[i].frameWidth,
+				Missile[i].frameHeight, Missile[i].xPos - Missile[i].frameWidth / 2, Missile[i].yPos - Missile[i].frameHeight / 2, 0);
+		}
 	}
 };
 
-void Player::FireMiss(Player Missile[])
+void Player::FireMiss(Player Missile[], Player &Ship)
 {
-	int i = 0;
-		Missile[i].live = true;
-		i++;
+	
+	for (int i = 0; i < 5; i++)
+	 {
+		if (!Missile[i].live)
+		{
+			Missile[i].xPos = Ship.xPos - 15;
+			Missile[i].yPos = Ship.yPos - 15;
+			Missile[i].live = true;
+			break;
+		  }
+		if (Missile[i].live)
+			break;
+	}
 };
 
 
@@ -150,18 +165,34 @@ void Player::UpdateMiss(Player Missile[])
 {
 	for (int i = 0; i < 5; i++)
 	{
-		if (Missile[i].live == true)
+		if (Missile[i].live)
 		{
-			Missile[i].animationCol = 0;
+			//Missile[i].animationCol = 0;
+			
 			Missile[i].yPos -= Missile[i].speed;
 
-			if (Missile[i].animationCol >= Missile[i].frameDelay)
+			if (++Missile[i].animationCol >= Missile[i].frameDelay)
 			{
+				if (++Missile[i].curFrame >= Missile[i].maxFrame)
+					Missile[i].curFrame = 0;
+
+				Missile[i].animationCol = 0;
+			}
+
+			
+			
+			/*if (Missile[i].animationCol <= Missile[i].frameDelay)
+			{
+				Missile[i].animationCol++;
+				
 				if (Missile[i].animationCol >= Missile[i].maxFrame)
 					Missile[i].animationCol = 0;
-
+				
 				frameCount = 0;
-			}
+			}*/
+			if (Missile[i].yPos <= 0)
+				Missile[i].live = false;
+		
 		}
 	}
 };
