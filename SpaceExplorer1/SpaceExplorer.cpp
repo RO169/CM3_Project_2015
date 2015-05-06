@@ -7,6 +7,7 @@
 #include <allegro5/allegro_ttf.h>
 #include"Background.h"
 #include"Player.h"
+#include"Alien.h"
 
 //Globals
 const int WIDTH = 600;
@@ -30,6 +31,8 @@ int main()
 	Player Ship;
 	Player Missile[5];
 
+	Alien Enemy[3];
+	
 	//allegro variables
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
@@ -42,6 +45,7 @@ int main()
 	ALLEGRO_BITMAP *fgImage = NULL;                      //foreground
 	ALLEGRO_BITMAP *pImage = NULL;                       //player sprite
 	ALLEGRO_BITMAP *mImage = NULL;                       //missile sprite
+	ALLEGRO_BITMAP *aImage = NULL;                       //alien sprite
 
 	//program init
 	if (!al_init())										//initialize Allegro
@@ -91,7 +95,11 @@ int main()
 	al_convert_mask_to_alpha(mImage, al_map_rgb(255, 255, 255));
 	Missile[5].InitMiss(Missile, Ship, mImage);
 
-
+	//Alien image
+	aImage = al_load_bitmap("aliens.png");
+	al_convert_mask_to_alpha(aImage, al_map_rgb(255, 255, 255));
+	Enemy[3].initAliens(Enemy, aImage);
+	
 	//event handlers
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
@@ -116,7 +124,11 @@ int main()
 			MG3.UpdateBackground(MG3);
 			MG3.UpdateBackground(MG4);
 			FG.UpdateBackground(FG);
+			
 			Missile[5].UpdateMiss(Missile);
+			Enemy[3].updateAliens(Enemy);
+			Enemy[3].startAlien(Enemy);
+
 			render = true;
 
 			//redraw = true;
@@ -216,8 +228,9 @@ int main()
 			MG3.DrawBackground(MG3);
 			FG.DrawBackground(FG);
 
-			Missile[0].DrawMiss(Missile);
+			Missile[5].DrawMiss(Missile);
 			Ship.DrawShip(Ship);
+			Enemy[3].drawAliens(Enemy);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -234,6 +247,7 @@ int main()
 	al_destroy_bitmap(fgImage);
 	al_destroy_bitmap(pImage);
 	al_destroy_bitmap(mImage);
+	al_destroy_bitmap(aImage);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						
 
