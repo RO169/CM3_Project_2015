@@ -1,4 +1,6 @@
 #include "Player.h"
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 const int HEIGHT = 438;
 const int WIDTH = 876;
 
@@ -6,7 +8,7 @@ Player::Player(){};
 
 Player::Player(int x=300, int y=580, int liv=5, int spd=1, int bndx=4, int bndy=4, int scor=0, int maxF=60,
 	           int curF=1, int fCount=0, int fDelay=2, int fWidth=343, int fHeight=171, int aniRow=0,
-               int aniDir=0, int aniCol=0, ALLEGRO_BITMAP *im=0)
+               int aniDir=0, int aniCol=0, ALLEGRO_BITMAP *im=0, bool live = false)
 {
 	xPos=x;
 	yPos=y;
@@ -31,9 +33,9 @@ void Player::InitShip(Player &ship, ALLEGRO_BITMAP *image)
 	ship.xPos = 300;
 	ship.yPos = 600;
 	ship.lives = 5;
-	ship.speed = 6;
-	ship.boundx = 10;
-	ship.boundy = 12;
+	ship.speed = 5;
+//	ship.boundx = 10;
+//	ship.boundy = 12;
 	ship.score = 0;
 
 	ship.maxFrame = 3;
@@ -100,6 +102,68 @@ void Player::MoveRight(Player &ship)
 	ship.xPos += ship.speed;
 	if (ship.xPos > 600)
 		ship.xPos = 600;
+};
+
+void Player::InitMiss(Player Missile[], Player &Ship , ALLEGRO_BITMAP *mImage)
+{
+	for (int i = 0; i < 5; i++)
+	{
+		Missile[i].xPos = Ship.xPos - 15;
+		Missile[i].yPos = Ship.yPos - 15;
+		Missile[i].speed = 8;
+		//Missile.boundx = 10;
+		//Missile.boundy = 12;
+		Missile[i].maxFrame = 16;
+		Missile[i].curFrame = 0;
+		Missile[i].frameCount = 0;
+		Missile[i].frameDelay = 8;
+		Missile[i].frameWidth = 24;
+		Missile[i].frameHeight = 97;
+		Missile[i].animationCol = 0;
+		Missile[i].animationDirection = -1;
+		Missile[i].animationRow = 0;
+		Missile[i].image = mImage;
+	}
+};
+
+void Player::DrawMiss(Player Missile[])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		int fx = Missile[i].animationCol * Missile[i].frameWidth;
+		int fy = Missile[i].animationRow * Missile[i].frameHeight;
+
+		al_draw_bitmap_region(Missile[i].image, fx, fy, Missile[i].frameWidth,
+			Missile[i].frameHeight, Missile[i].xPos - Missile[i].frameWidth / 2, Missile[i].yPos - Missile[i].frameHeight / 2, 0);
+	}
+};
+
+void Player::FireMiss(Player Missile[])
+{
+	int i = 0;
+		Missile[i].live = true;
+		i++;
+};
+
+
+void Player::UpdateMiss(Player Missile[])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		if (Missile[i].live == true)
+		{
+			Missile[i].animationCol = 0;
+			Missile[i].yPos -= Missile[i].speed;
+
+			if (Missile[i].animationCol >= Missile[i].frameDelay)
+			{
+				if (Missile[i].animationCol >= Missile[i].maxFrame)
+					Missile[i].animationCol = 0;
+
+				frameCount = 0;
+			}
+		}
+	}
 };
 
 Player::~Player()

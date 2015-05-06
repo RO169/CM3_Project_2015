@@ -8,7 +8,7 @@
 #include"Background.h"
 #include"Player.h"
 
-//Globals: GUI Setup
+//Globals
 const int WIDTH = 600;
 const int HEIGHT = 650;
 enum KEYS{ UP, DOWN, LEFT, RIGHT, SPACE };
@@ -26,20 +26,22 @@ int main()
 	Background MG3;
 	Background MG4;
 	Background FG;
-
+	
 	Player Ship;
+	Player Missile[5];
 
 	//allegro variables
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
-	ALLEGRO_BITMAP *bgImage = NULL;
-	ALLEGRO_BITMAP *mgImage1 = NULL;
-	ALLEGRO_BITMAP *mgImage2 = NULL;
-	ALLEGRO_BITMAP *mgImage3 = NULL;
-	ALLEGRO_BITMAP *mgImage4 = NULL;
-	ALLEGRO_BITMAP *fgImage = NULL;
-	ALLEGRO_BITMAP *pImage = NULL;
+	ALLEGRO_BITMAP *bgImage = NULL;                      //background
+	ALLEGRO_BITMAP *mgImage1 = NULL;                     //middleground 1
+	ALLEGRO_BITMAP *mgImage2 = NULL;                     //middleground 2
+	ALLEGRO_BITMAP *mgImage3 = NULL;                     //middleground 3
+	ALLEGRO_BITMAP *mgImage4 = NULL;                     //middleground 4
+	ALLEGRO_BITMAP *fgImage = NULL;                      //foreground
+	ALLEGRO_BITMAP *pImage = NULL;                       //player sprite
+	ALLEGRO_BITMAP *mImage = NULL;                       //missile sprite
 
 	//program init
 	if (!al_init())										//initialize Allegro
@@ -59,7 +61,7 @@ int main()
 
 	//background images
 	srand(time(0));
-	int num = ((rand() % 6000) + 2000);
+	int num = ((rand() % 6000) + 2000);                //use random numbers for planet appearance repitition
 
 	bgImage = al_load_bitmap("spaceBG.jpg");
 	mgImage1 = al_load_bitmap("MG-1.png");
@@ -79,10 +81,15 @@ int main()
 	MG3.InitBackground(MG3, 0, 0, 0.1, 0.6, 600, 210 + num * num, -3, 1, mgImage3);
 	MG4.InitBackground(MG4, 0, 0, 0.02, 0.6, 600, 1500 + num, 1, 1, mgImage4);
 
-	//player images
-	pImage = al_load_bitmap("Ship Sprite sheet 3x3.png");
+	//player pImage
+	pImage = al_load_bitmap("Ship.png");
 	al_convert_mask_to_alpha(pImage, al_map_rgb(0, 0, 0));
 	Ship.InitShip(Ship, pImage);
+
+	//missile image
+	mImage = al_load_bitmap("missile-sprite.png");
+	Missile[5].InitMiss(Missile, Ship, mImage);
+
 
 	//event handlers
 	event_queue = al_create_event_queue();
@@ -108,9 +115,11 @@ int main()
 			MG3.UpdateBackground(MG3);
 			MG3.UpdateBackground(MG4);
 			FG.UpdateBackground(FG);
+			Missile[5].UpdateMiss(Missile);
 			render = true;
 
 			//redraw = true;
+			
 			if (keys[UP])
 				Ship.MoveUp(Ship);
 			else if (keys[DOWN])
@@ -124,6 +133,10 @@ int main()
 				Ship.MoveRight(Ship);
 			else
 				Ship.ResetShipAnimation(Ship, 2);
+
+			if (keys[SPACE])
+			   Missile[5].FireMiss(Missile);
+			
 			/*
 			if (!isGameOver)
 			{
@@ -202,6 +215,7 @@ int main()
 			MG3.DrawBackground(MG3);
 			FG.DrawBackground(FG);
 
+			Missile[5].DrawMiss(Missile);
 			Ship.DrawShip(Ship);
 
 			al_flip_display();
@@ -218,6 +232,7 @@ int main()
 	al_destroy_bitmap(mgImage4);
 	al_destroy_bitmap(fgImage);
 	al_destroy_bitmap(pImage);
+	al_destroy_bitmap(mImage);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						
 

@@ -26,11 +26,14 @@ private:
 
 	ALLEGRO_BITMAP *image;
 
+	bool live;
+
 public:
 	Player();
 	Player(int x, int y, int liv, int spd, int bndx, int bndy, int scor, int maxF,
 		   int curF, int fCount, int fDelay, int fWidth, int fHeight, int aniCols,
-		   int aniDir, int aniColr, ALLEGRO_BITMAP *im);
+		   int aniDir, int aniColr, ALLEGRO_BITMAP *im, bool live);
+	
 	void InitShip(Player &ship, ALLEGRO_BITMAP *image);
 	void ResetShipAnimation(Player &ship, int position);
 	void DrawShip(Player &ship);
@@ -38,6 +41,12 @@ public:
 	void MoveDown(Player &ship);
 	void MoveLeft(Player &ship);
 	void MoveRight(Player &ship);
+	
+	void InitMiss(Player miss[], Player &Ship, ALLEGRO_BITMAP *mImage);
+	void DrawMiss(Player miss[]);
+	void FireMiss(Player miss[]);
+	void UpdateMiss(Player miss[]);
+	
 	~Player();
 };
 
