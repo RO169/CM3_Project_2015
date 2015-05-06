@@ -248,6 +248,7 @@ int main()
 	al_destroy_bitmap(pImage);
 	al_destroy_bitmap(mImage);
 	al_destroy_bitmap(aImage);
+	al_destroy_timer(timer);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						
 

@@ -19,12 +19,13 @@ private:
 	int frameDelay;
 	int frameWidth;
 	int frameHeight;
+	int frameCount;
 	ALLEGRO_BITMAP *image;
 
 public:
 	Alien();
 	Alien(bool live, int x, int y, int anCol, int anRow, int speed, int mFrame, 
-		  int cFrame, int fDelay, int fWidth, int fHeight, ALLEGRO_BITMAP *im);
+		  int cFrame, int fDelay, int fWidth, int fHeight, ALLEGRO_BITMAP *im, int fCount);
 
 	void initAliens(Alien fSaucer[], ALLEGRO_BITMAP*image);
 	void drawAliens(Alien fSaucer[]);
