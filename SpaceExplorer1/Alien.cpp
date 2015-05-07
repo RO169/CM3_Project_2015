@@ -1,6 +1,8 @@
 #include "Alien.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include<cstdlib> 
+#include<ctime>
 
 Alien::Alien(){};
 
@@ -28,7 +30,7 @@ void Alien::initAliens(Alien fSaucer[], ALLEGRO_BITMAP*image)
 	{
 		fSaucer[i].xPos = 300;
 		fSaucer[i].yPos = 20;
-		fSaucer[i].speed = 1;
+		fSaucer[i].speed = 3;
 		//Missile.boundx = 10;
 		//Missile.boundy = 12;
 		fSaucer[i].maxFrame = 3;
@@ -36,7 +38,7 @@ void Alien::initAliens(Alien fSaucer[], ALLEGRO_BITMAP*image)
 		
 		fSaucer[i].frameDelay = 1;
 		fSaucer[i].frameWidth = 154;
-		fSaucer[i].frameHeight = 100;
+		fSaucer[i].frameHeight = 108;
 		fSaucer[i].animationCol = 0;
 		fSaucer[i].frameCount = 0;
 
@@ -64,16 +66,18 @@ void Alien::drawAliens(Alien fSaucer[])
 
 void Alien::startAlien(Alien fSaucer[])
 {
-	//srand(time(NULL));
+	
 	for (int i = 0; i < 3; i++)
 	{
 		if (!fSaucer[i].live)
 		{
-			if (rand() % 500 == 0)
+			srand(time(0));
+			if ((rand() % 500) % 2 == 0)
 			{
 				fSaucer[i].live = true;
 				fSaucer[i].yPos = 0;
-				fSaucer[i].xPos = 300; //+ rand() % (500);
+				fSaucer[i].xPos = rand() % (500);
+				fSaucer[i].animationRow = (rand() % 3);
 
 				break;
 			}
@@ -107,6 +111,7 @@ void Alien::updateAliens(Alien fSaucer[])
 				fSaucer[i].live = false;
 
 	    	}
+
 
 	}
 };
