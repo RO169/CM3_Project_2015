@@ -140,6 +140,7 @@ void Player::DrawMiss(Player Missile[])
 			al_draw_bitmap_region(Missile[i].image, fx, fy, Missile[i].frameWidth,
 		 Missile[i].frameHeight, Missile[i].xPos - Missile[i].frameWidth / 2, Missile[i].yPos - Missile[i].frameHeight / 2, 0);
 		}
+		break;
 	}
 };
 
@@ -149,12 +150,16 @@ void Player::FireMiss(Player Missile[], Player &Ship)
 	for (int i=0; i < 5; i++)
 	 {
 		if (!Missile[i].live)
-		{
+		 {
+			Missile[i].live = true;
 			Missile[i].xPos = Ship.xPos - 15;
 			Missile[i].yPos = Ship.yPos - 15;
-			Missile[i].live = true;
+			
+			
 			break;
-		  }
+		 }
+		
+		if (Missile[i].live)
 		break;
 	}
 };
@@ -170,16 +175,20 @@ void Player::UpdateMiss(Player Missile[])
 			Missile[i].yPos -= Missile[i].speed;
 
 			if (++Missile[i].animationCol >= Missile[i].frameDelay)
-			{
+			 {
 				if (++Missile[i].curFrame >= Missile[i].maxFrame)
 					Missile[i].curFrame = 0;
 
+
+				if (Missile[i].animationCol>=17)
 				Missile[i].animationCol = 0;
-			}
+             }
 
 			if (Missile[i].yPos <= 0)
-				Missile[i].live = false;		
-		
+			{
+				Missile[i].live = false;
+				break;
+			}
 		}
 	}
 };

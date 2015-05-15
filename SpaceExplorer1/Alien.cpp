@@ -69,18 +69,24 @@ void Alien::startAlien(Alien fSaucer[])
 	
 	for (int i = 0; i < 3; i++)
 	{
+		srand(time(0));
+		int num1 = (rand() % (600));
+		int num2 = (rand() % 3);
+
 		if (!fSaucer[i].live)
 		{
-			srand(time(0));
 			if ((rand() % 500) % 2 == 0)
 			{
 				fSaucer[i].live = true;
 				fSaucer[i].yPos = 0;
-				fSaucer[i].xPos = rand() % (500);
-				fSaucer[i].animationRow = (rand() % 3);
+				fSaucer[i].xPos = num1;
+				fSaucer[i].animationRow = num2;
 
 				break;
 			}
+
+			if (fSaucer[i].live)
+			break;
 		}
 	}
 };
@@ -107,13 +113,12 @@ void Alien::updateAliens(Alien fSaucer[])
 				fSaucer[i].animationCol = 0;
 			}
 
-			if (fSaucer[i].yPos >= 700)
-				fSaucer[i].live = false;
-
-	    	}
-
-
+			
+	    }
+	    	if (fSaucer[i].yPos >= 700)
+			fSaucer[i].live = false;
 	}
+	
 };
 
 Alien::~Alien(){};
