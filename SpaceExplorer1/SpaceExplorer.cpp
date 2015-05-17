@@ -5,21 +5,37 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include"Background.h"
 #include"Player.h"
 #include"Alien.h"
+#include"boss.h"
+
 
 //Globals
 const int WIDTH = 600;
 const int HEIGHT = 650;
-enum KEYS{ UP, DOWN, LEFT, RIGHT, SPACE };
-bool keys[5] = { false, false, false, false, false };
+
+enum KEYS{ UP, DOWN, LEFT, RIGHT, SPACE, ESCAPE };
+bool keys[6] = { false, false, false, false, false, false };
+enum state { start, playing, finish};								//initiate game states
+
 
 int main()
 {
 	//variables
 	bool done = false;
 	bool render = false;
+	int state = start;
+	int points = 0;
+	bool trial=false;
+	ALLEGRO_SAMPLE *sample = NULL;
+	ALLEGRO_SAMPLE *sample2 = NULL;
+	ALLEGRO_SAMPLE *sample3 = NULL;
+	ALLEGRO_SAMPLE_INSTANCE *instance1 = NULL;
+	ALLEGRO_SAMPLE_INSTANCE *instance2 = NULL;
+	ALLEGRO_SAMPLE_INSTANCE *instance3 = NULL;
 
 	Background BG;
 	Background MG1;
@@ -27,10 +43,9 @@ int main()
 	Background MG3;
 	Background MG4;
 	Background FG;
-	
 	Player Ship;
 	Player Missile[5];
-
+	boss bss[1];
 	Alien Enemy[3];
 	
 	//allegro variables
@@ -46,12 +61,15 @@ int main()
 	ALLEGRO_BITMAP *pImage = NULL;                       //player sprite
 	ALLEGRO_BITMAP *mImage = NULL;                       //missile sprite
 	ALLEGRO_BITMAP *aImage = NULL;                       //alien sprite
+	//ALLEGRO_BITMAP *bssImage = NULL;
+	ALLEGRO_BITMAP *firstImage = NULL;					//front page
+	ALLEGRO_BITMAP *closeImage = NULL;
 
 	//program init
 	if (!al_init())										//initialize Allegro
 		return -1;
 
-	display = al_create_display(WIDTH, HEIGHT);			//create our display object
+	display = al_create_display(WIDTH, HEIGHT);			///create our display object
 
 	if (!display)										//test display object
 		return -1;
@@ -62,7 +80,21 @@ int main()
 	al_init_font_addon();
 	al_init_ttf_addon();
 	al_init_primitives_addon();
-
+	
+		// audio
+	al_install_audio();
+	al_init_acodec_addon();
+	al_reserve_samples(5);
+	sample = al_load_sample("darth_vader.ogg");
+	sample2 = al_load_sample("Gun.ogg");
+	sample3 = al_load_sample("Exploding1.ogg");
+	instance1 = al_create_sample_instance(sample);
+	instance2 = al_create_sample_instance(sample2);
+	instance3 = al_create_sample_instance(sample3);
+	al_attach_sample_instance_to_mixer(instance1, al_get_default_mixer());
+	al_attach_sample_instance_to_mixer(instance2, al_get_default_mixer());
+	al_attach_sample_instance_to_mixer(instance3, al_get_default_mixer());
+	//al_play_sample(sample2, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 	//background images
 	srand(time(0));
 	int num = ((rand() % 6000) + 2000);                //use random numbers for planet appearance repitition
@@ -99,7 +131,17 @@ int main()
 	aImage = al_load_bitmap("aliens.png");
 	al_convert_mask_to_alpha(aImage, al_map_rgb(255, 255, 255));
 	Enemy[3].initAliens(Enemy, aImage);
-	
+
+	//Boss Alien image
+	/*bssImage = al_load_bitmap("boss-alien.png");
+	al_convert_mask_to_alpha(bssImage, al_map_rgb(255, 255, 255));
+	bss[1].initBoss(bss, bssImage);
+	*/
+	//front page
+	firstImage = al_load_bitmap("frontp.png");
+	closeImage = al_load_bitmap("TheEnd.png");
+	al_convert_mask_to_alpha(aImage, al_map_rgb(000, 000, 000));
+
 	//event handlers
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
@@ -124,15 +166,14 @@ int main()
 			MG3.UpdateBackground(MG3);
 			MG3.UpdateBackground(MG4);
 			FG.UpdateBackground(FG);
-			
+
 			Missile[5].UpdateMiss(Missile);
 			Enemy[3].updateAliens(Enemy);
-			Enemy[3].startAlien(Enemy);
-
+			
 			render = true;
 
 			//redraw = true;
-			
+
 			if (keys[UP])
 				Ship.MoveUp(Ship);
 			else if (keys[DOWN])
@@ -148,8 +189,19 @@ int main()
 				Ship.ResetShipAnimation(Ship, 2);
 
 			if (keys[SPACE])
-			   Missile[5].FireMiss(Missile, Ship);
-			
+			{
+				Missile[5].FireMiss(Missile, Ship);
+				al_play_sample_instance(instance2);
+			}
+			//if (points <= 20)						//only intialize aliens untill 20 points
+			//{
+				Enemy[3].startAlien(Enemy);
+			//}
+			//if (points > 20)						//only intialize aliens untill 20 points
+			/*{
+				bss[1].startBoss(bss);
+				bss[1].updateBoss(bss);
+			}*/
 			/*
 			if (!isGameOver)
 			{
@@ -162,16 +214,52 @@ int main()
 				if (ship.lives <= 0)
 					isGameOver = true;
 			}*/
+			if (state == start)
+										// states of gameplay
+			{
+				if (keys[SPACE])
+				{
+					state = playing;
+				}
+			}
+			else if (state = playing)
+			{
+				if (trial)
+				{
+					state = finish;
+					trial = false;
+				}
+				if (points>=25)
+				{
+					state = playing;
+				}
+			}
+			/*else if (state = finish)
+			{
+				if (keys[SPACE])
+				{
+					state = playing;
+				}
+				if (trial)
+				{
+					done = true;
+				}
+			}*/
+
 		}
 		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
-			done = true;
+			if (state=finish)
+			{
+				done = true;
+			}	
 		}
 		else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
 		{
 			switch (ev.keyboard.keycode)
 			{
 			case ALLEGRO_KEY_ESCAPE:
+				keys[ESCAPE] = true;
 				done = true;
 				break;
 			case ALLEGRO_KEY_UP:
@@ -192,12 +280,13 @@ int main()
 				break;
 			}
 		}
+		
 		else if (ev.type == ALLEGRO_EVENT_KEY_UP)
 		{
 			switch (ev.keyboard.keycode)
 			{
 			case ALLEGRO_KEY_ESCAPE:
-				done = true;
+				keys[ESCAPE] = true;
 				break;
 			case ALLEGRO_KEY_UP:
 				keys[UP] = false;
@@ -216,21 +305,37 @@ int main()
 				break;
 			}
 		}
-
+		
 
 		if (render && al_is_event_queue_empty(event_queue))
 		{
 			render = false;
+			if (state == start)
+			{
+				al_draw_bitmap(firstImage, 0, 0, 0);
+			}
+			else if (state = playing)
+			{
+				al_play_sample_instance(instance1);
+				BG.DrawBackground(BG);
+				MG1.DrawBackground(MG1);
+				MG2.DrawBackground(MG2);
+				MG3.DrawBackground(MG3);
+				FG.DrawBackground(FG);
+				Missile[5].DrawMiss(Missile);
+				Ship.DrawShip(Ship);
+				Enemy[3].drawAliens(Enemy);
+				//bss[1].drawBoss(bss);
 
-			BG.DrawBackground(BG);
-			MG1.DrawBackground(MG1);
-			MG2.DrawBackground(MG2);
-			MG3.DrawBackground(MG3);
-			FG.DrawBackground(FG);
+				if (Missile[5].live==true)
+				{					
+				}	
+			}
 
-			Missile[5].DrawMiss(Missile);
-			Ship.DrawShip(Ship);
-			Enemy[3].drawAliens(Enemy);
+			else if (state = finish)
+			{
+				al_draw_bitmap(closeImage, 0, 0, 0);
+			}
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -248,9 +353,19 @@ int main()
 	al_destroy_bitmap(pImage);
 	al_destroy_bitmap(mImage);
 	al_destroy_bitmap(aImage);
+	al_destroy_bitmap(firstImage);
+	al_destroy_bitmap(closeImage);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						
+	al_destroy_sample(sample);
+	al_destroy_sample(sample2);
+	al_destroy_sample(sample3);
+	al_destroy_sample_instance(instance1);
+	al_destroy_sample_instance(instance2);
+	al_destroy_sample_instance(instance3);
+	//al_destroy_bitmap(bssImage);
 
 	return 0;
 }
+
 
