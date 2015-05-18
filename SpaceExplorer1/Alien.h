@@ -25,14 +25,15 @@ private:
 	ALLEGRO_BITMAP *image;
 
 public:
+	int limit;
 	Alien();
 	Alien(bool live, int x, int y, int anCol, int anRow, int speed, int mFrame, 
 		  int cFrame, int fDelay, int fWidth, int fHeight, ALLEGRO_BITMAP *im, int fCount);
 
 	void initAliens(Alien fSaucer[], ALLEGRO_BITMAP*image);
 	void drawAliens(Alien fSaucer[]);
-	void startAlien(Alien fSaucer[]);
-	void updateAliens(Alien fSaucer[]);
+	void startAlien(Alien fSaucer[],int lim);
+	void updateAliens(Alien fSaucer[],int lim);
 
 	~Alien();
 };

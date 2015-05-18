@@ -25,10 +25,8 @@ private:
 	int animationCol;
 
 	ALLEGRO_BITMAP *image;
-
-	bool live;
-
 public:
+	bool live;
 	Player();
 	Player(int x, int y, int liv, int spd, int bndx, int bndy, int scor, int maxF,
 		   int curF, int fCount, int fDelay, int fWidth, int fHeight, int aniCols,

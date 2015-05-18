@@ -130,7 +130,7 @@ void Player::InitMiss(Player Missile[], Player &Ship , ALLEGRO_BITMAP *mImage)
 
 void Player::DrawMiss(Player Missile[])
 {
-		for (int i = 0; i < 5; i++)
+		for (int i = 4; i < 5; i++)
 	{
 		if (Missile[i].live)
 		{
@@ -147,7 +147,7 @@ void Player::DrawMiss(Player Missile[])
 void Player::FireMiss(Player Missile[], Player &Ship)
 {
 	
-	for (int i=0; i < 5; i++)
+	for (int i=4; i < 5; i++)
 	 {
 		if (!Missile[i].live)
 		 {
